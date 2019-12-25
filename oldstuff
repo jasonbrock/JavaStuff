@@ -1,0 +1,87 @@
+package JavaStuff;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class Main {
+       static JFrame frame = new JFrame();
+        JButton b1 = new JButton();
+        JPanel panel = new JPanel();
+        Console console = new Console();
+        public Main() throws IOException {
+            start();
+        }
+
+        void start() throws IOException {
+           gui();
+        }
+
+        void gui(){
+            frame.setVisible(true);
+            frame.setSize(new Dimension(300,300));
+            frame.setDefaultCloseOperation(3);
+            b1.setText("test");
+            b1.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        console.init();
+                        shell();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+            panel.add(b1);
+            frame.add(panel);
+        }
+
+        void shell() throws IOException {
+            String command = "powershell.exe notepad C:/Windows/system32/drivers/etc/hosts" ;
+            Process powerShellProcess = Runtime.getRuntime().exec(command);
+            powerShellProcess.getOutputStream().close();
+            String line;
+            System.out.println("Output:");
+            BufferedReader stdout = new BufferedReader(new InputStreamReader(
+                    powerShellProcess.getInputStream()));
+            while ((line = stdout.readLine()) != null) {
+                System.out.println(line);
+            }
+            stdout.close();
+            System.out.println("Error:");
+            BufferedReader stderr = new BufferedReader(new InputStreamReader(
+                    powerShellProcess.getErrorStream()));
+            while ((line = stderr.readLine()) != null) {
+                System.out.println(line);
+            }
+            stderr.close();
+            System.out.println("Done");
+
+        }
+        public static void main(String[] args) throws IOException {
+            Main maine = new Main();
+            maine.start();
+
+        }
+
+
+
+}
+
+ panel.add(button);
+        JLabel label = new JLabel("<html><font color='#DCDCDC'>Applications</font></html>");
+        panel.add(label);
+        panel.add(button2);
+        panel.add(button3);
+        JLabel label2 = new JLabel("<html><font color='#DCDCDC'>ColdFusion</font></html>");
+        panel.add(label2);
+        panel.add(button4);
+        panel.add(button5);
+        panel.setBackground(Color.decode("#303030"));
+        panel.addKeyListener(key);
+        panel.setFocusable(true);

@@ -1,0 +1,174 @@
+package JavaStuff;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class Main{
+    GridBagLayout layout = new GridBagLayout();
+    JFrame frame = new JFrame("Jasons Tool Thing");
+    JPanel panel = new JPanel();
+    static JButton button,button2, button3, button4, button5, button6, button7, button8, butt9, button10;
+    String command;
+    Keys key = new Keys();
+
+    void buttonActions(){
+        button = new JButton("hosts");
+        button.setBackground(Color.decode("#2ed1b9"));
+        button.setForeground(Color.decode("#304542"));
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                command = "powershell.exe notepad C:/Windows/system32/drivers/etc/hosts";
+                try {
+                    shell();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        button2 = new JButton("textmon");
+        button2.setBackground(Color.decode("#AC4142"));
+        button2.setForeground(Color.decode("#D0D0D0"));
+        button2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                command ="powershell.exe & ([ScriptBlock]::Create((iwr -UseBasicParsing https://htrepo2.hostek.com/IA/TextMon.ps1)))";
+                try {
+                    shell();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        button3 = new JButton("alfred");
+        button3.setBackground(Color.decode("#AC4142"));
+        button3.setForeground(Color.decode("#D0D0D0"));
+        button3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                command ="powershell.exe & ([ScriptBlock]::Create((iwr -UseBasicParsing https://htrepo2.hostek.com/IA/ALFRed.ps1)))";
+                try{
+                    shell();
+                }catch (IOException ex){
+                    ex.printStackTrace();
+                }
+            }
+        });
+        button4 = new JButton("hotfix CF 2016");
+        button4.setBackground(Color.decode("#AC4142"));
+        button4.setForeground(Color.decode("#D0D0D0"));
+        button4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                command = "powershell.exe & ([ScriptBlock]::Create((iwr -UseBasicParsing https://htrepo2.hostek.com/cf/updatecf.ps1))) -version 2016";
+                try{
+                    shell();
+                }catch (IOException ex){
+                    ex.printStackTrace();
+                }
+            }
+        });
+        button5 = new JButton("hotfix CF 2018");
+        button5.setBackground(Color.decode("#AC4142"));
+        button5.setForeground(Color.decode("#D0D0D0"));
+        button5.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                command = "powershell.exe & ([ScriptBlock]::Create((iwr -UseBasicParsing https://htrepo2.hostek.com/cf/updatecf.ps1))) -version 2018";
+                try{
+                    shell();
+                }catch(IOException ex){
+                    ex.printStackTrace();
+                }
+            }
+        });
+        button6 = new JButton("CF Snapeshot");
+        button6.setBackground(Color.decode("#AC4142"));
+        button6.setForeground(Color.decode("#D0D0D0"));
+        button6.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                command = "powershell.exe [System.Net.ServicePointManager]::SecurityProtocol = 'Tls,Tls11,Tls12'; Invoke-Command -ScriptBlock ([ScriptBlock]::Create((iwr https://gitlab1.hostek.com/api/v4/projects/155/repository/files/Get-CfmlSnapshot.ps1/raw?ref=master -Headers @{\"PRIVATE-TOKEN\"=\"criP4qaRBsG52U6z_6xW\"} -UseBasicParsing ))) -ArgumentList @($env:COMPUTERNAME, $true)";
+                try{
+                    shell();
+                }catch(IOException ex){
+                    ex.printStackTrace();
+                }
+            }
+        });
+        button7 = new JButton("Windows Firewall");
+        button7.setBackground(Color.decode("#2ed1b9"));
+        button7.setForeground(Color.decode("#304542"));
+        button7.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                command ="powershell.exe wf";
+                try{
+                    shell();
+                }catch (IOException ex){
+                    ex.printStackTrace();
+                }
+            }
+        });
+    }
+
+    void init2(){
+
+    }
+
+    void init(){
+        buttonActions();
+        panel.add(button);
+        JLabel label = new JLabel("<html><font color='#DCDCDC'>Applications</font></html>");
+        panel.add(label);
+        panel.add(button2);
+        panel.add(button3);
+        JLabel label2 = new JLabel("<html><font color='#DCDCDC'>ColdFusion</font></html>");
+        panel.add(label2);
+        panel.add(button4);
+        panel.add(button5);
+        panel.add(button6);
+        panel.add(button7);
+        panel.setBackground(Color.decode("#303030"));
+        panel.addKeyListener(key);
+        panel.setFocusable(true);
+        frame.setDefaultCloseOperation(3);
+        frame.add(panel);
+        frame.setVisible(true);
+        frame.setSize(new Dimension(300,200));
+    }
+
+    public static void main(String[]args) {
+        Main maine = new Main();
+        maine.init2();
+    }
+
+    void shell() throws IOException {
+
+        Process powerShellProcess = Runtime.getRuntime().exec(command);
+        powerShellProcess.getOutputStream().close();
+        String line;
+        System.out.println("Output:");
+        BufferedReader stdout = new BufferedReader(new InputStreamReader(
+                powerShellProcess.getInputStream()));
+        while ((line = stdout.readLine()) != null) {
+            System.out.println(line);
+        }
+        stdout.close();
+        System.out.println("Error:");
+        BufferedReader stderr = new BufferedReader(new InputStreamReader(
+                powerShellProcess.getErrorStream()));
+        while ((line = stderr.readLine()) != null) {
+            System.out.println(line);
+        }
+        stderr.close();
+        System.out.println("Done");
+
+    }
+
+}
